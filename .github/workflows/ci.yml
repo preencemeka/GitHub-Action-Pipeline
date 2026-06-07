@@ -1,4 +1,4 @@
-name: My First CI Pipeline
+name: My CI Pipeline with Tests
 
 on:
   push:
@@ -7,19 +7,20 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Say hello
-        run: echo "Pipeline is working!"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-      - name: Check the environment
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Files in repo:"
-          ls
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Run tests
+        run: pytest test_calculator.py --verbose
